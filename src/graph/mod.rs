@@ -31,16 +31,21 @@ fn get_node_from_eq(eq: &Vec<Expression>) -> Result<i32, Error> {
   }
 }
 
-fn get_label_for_edge(eq: &Vec<Expression>) -> Result<char, Error> {
-  if let [Expression::Identifier(_), Expression::FunctionCall(_, params)] = &eq[..] {
-    if let [Expression::Cast(SmtType::Char, char_code)] = params[..] {
-      let char = char::from(char_code as u8);
-      Ok(char)
-    } else {
-      Err(Error::new("missing label for edge"))
-    }
-  } else {
-    return Err(Error::new("malformed eq expression"))
+fn get_label_for_edge(eq: &Vec<Expression>) -> Result<String, Error> {
+  // z3 can either out output `(= x!2 (seq.unit (_ Char 97)))` or `(= x!2 "a")`, not sure why
+  match &eq[..] {
+    [Expression::Identifier(_), Expression::FunctionCall(_, params)] => {
+      if let [Expression::Cast(SmtType::Char, char_code)] = params[..] {
+        let char = char::from(char_code as u8);
+        Ok(char.to_string())
+      } else {
+        Err(Error::new("missing label for edge"))
+      }
+    },
+    [Expression::Identifier(_), Expression::String(label)] => {
+      Ok(label.clone())
+    },
+    _ => Err(Error::new("malformed eq expression"))
   }
 }
 
@@ -64,7 +69,7 @@ fn graph_from_ite_chain(ite_chain: &Expression) -> Result<DiGraph<i32, String>, 
           Entry::Vacant(v) => *v.insert(graph.add_node(node_b))
         };
 
-        graph.add_edge(a_id, b_id, edge_label.to_string());
+        graph.add_edge(a_id, b_id, edge_label);
       } else {
         return Err(Error::new("malformed and expression"))
       }
