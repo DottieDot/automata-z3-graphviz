@@ -76,8 +76,8 @@ fn main() {
     .expect("Failed to start GraphViz");
 
   let stdin = graphviz.stdin.as_mut().unwrap();
-  stdin.write(dot_string.as_bytes()).unwrap();
-  drop(stdin);
+  stdin.write_all(dot_string.as_bytes()).unwrap();
+
   graphviz.wait_with_output()
     .map_err(|e| panic!("{e}"))
     .unwrap();

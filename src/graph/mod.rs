@@ -23,17 +23,17 @@ impl fmt::Display for Error {
   }
 }
 
-fn get_node_from_eq(eq: &Vec<Expression>) -> Result<i32, Error> {
-  if let [Expression::Identifier(_), Expression::Integer(node_id)] = &eq[..] {
+fn get_node_from_eq(eq: &[Expression]) -> Result<i32, Error> {
+  if let [Expression::Identifier(_), Expression::Integer(node_id)] = eq {
     Ok(*node_id)
   } else {
-    return Err(Error::new("malformed eq expression"))
+    Err(Error::new("malformed eq expression"))
   }
 }
 
-fn get_label_for_edge(eq: &Vec<Expression>) -> Result<String, Error> {
+fn get_label_for_edge(eq: &[Expression]) -> Result<String, Error> {
   // z3 can either out output `(= x!2 (seq.unit (_ Char 97)))` or `(= x!2 "a")`, not sure why
-  match &eq[..] {
+  match eq {
     [Expression::Identifier(_), Expression::FunctionCall(_, params)] => {
       if let [Expression::Cast(SmtType::Char, char_code)] = params[..] {
         let char = char::from(char_code as u8);

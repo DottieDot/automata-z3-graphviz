@@ -1,5 +1,3 @@
-use peg;
-
 mod smt_type;
 pub use smt_type::*;
 mod expression;
