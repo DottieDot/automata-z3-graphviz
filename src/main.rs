@@ -11,10 +11,10 @@ use graph::graph_from_model;
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-  #[clap(long, help = "The smt file to run z3 on")]
+  #[clap(long, help = "The smt file to run z3 on", conflicts_with = "z3", required_unless_present = "z3")]
   smt: Option<String>,
 
-  #[clap(long, help = "The z3 output to use")]
+  #[clap(long, help = "The z3 output to use", conflicts_with = "smt", required_unless_present = "smt")]
   z3: Option<String>,
 
   #[clap(long, short, help = "The output file")]
