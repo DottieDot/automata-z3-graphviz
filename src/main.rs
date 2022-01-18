@@ -60,7 +60,7 @@ fn main() {
   println!("{}", String::from_utf8(vec![b'='; 64]).unwrap());
   
   let graph = graph_from_model(model)
-    .map_err(|e| panic!("{}", e))
+    .map_err(|e| panic!("{e}"))
     .unwrap();
   let dot = Dot::new(&graph);
   let dot_string = format!("{dot:?}");
