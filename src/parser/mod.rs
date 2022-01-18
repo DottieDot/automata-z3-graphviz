@@ -18,7 +18,7 @@ pub type Model = Vec<Function>;
 peg::parser! {
   pub grammar smt_parser() for str {
     pub rule model() -> Model
-      = "sat" _ "(" _ ("model")? _ functions:((i:function() _ {i})*) _ ")" _ {
+      = ("sat" / "unsat") _ "(" _ ("model")? _ functions:((i:function() _ {i})*) _ ")" _ {
         functions
       }
 
