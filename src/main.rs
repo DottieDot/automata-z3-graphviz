@@ -1,5 +1,5 @@
 use clap::Parser;
-use std::{process::{Command, Stdio}, io::Write};
+use std::{process::{Command, Stdio}, io::{Write, Read}, fs::File};
 
 mod graph;
 mod parser;
@@ -12,7 +12,10 @@ use graph::graph_from_model;
 #[clap(author, version, about, long_about = None)]
 struct Args {
   #[clap(long, help = "The smt file to run z3 on")]
-  z3: String,
+  smt: Option<String>,
+
+  #[clap(long, help = "The z3 output to use")]
+  z3: Option<String>,
 
   #[clap(long, short, help = "The output file")]
   output: String,
@@ -24,12 +27,21 @@ struct Args {
 fn main() {
   let args = Args::parse();
 
-  let raw_input = Command::new("z3")
-    .arg(args.z3)
-    .output()
-    .expect("failed to start z3");
-  let input = String::from_utf8(raw_input.stdout)
-    .expect("z3 output not a utf-8 string");
+  let mut input: String = "".to_string();
+
+  if let Some(smt_file) = args.smt {
+    let raw_input = Command::new("z3")
+      .arg(smt_file)
+      .output()
+      .expect("failed to start z3");
+    input = String::from_utf8(raw_input.stdout)
+      .expect("z3 output not a utf-8 string");
+  } else if let Some(z3_file) = args.z3 {
+    let mut file = File::open(z3_file).expect("Failed to open {z3_file}");
+    file.read_to_string(&mut input).expect("Failed to read z3 file");
+  } else {
+    panic!("No input provided")
+  }
 
   println!("Parsing \"{input}\":");
   

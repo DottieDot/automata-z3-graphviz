@@ -1,0 +1,209 @@
+sat
+(model
+  (define-fun FinalStates () String
+    "1001:1009:end")
+  (define-fun InitState () Int
+    1000)
+  (define-fun MaxState () Int
+    1009)
+  (define-fun A ((x!0 Int) (x!1 Int) (x!2 String)) Bool
+    (ite (and (= x!0 1006) (= x!1 1009) (= x!2 "a")) true
+    (ite (and (= x!0 1004) (= x!1 1009) (= x!2 "a")) true
+    (ite (and (= x!0 1000) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1005) (= x!1 1004) (= x!2 "a")) true
+    (ite (and (= x!0 1000) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1005) (= x!1 1008) (= x!2 "a")) true
+    (ite (and (= x!0 1003) (= x!1 1009) (= x!2 "b")) true
+    (ite (and (= x!0 1008) (= x!1 1003) (= x!2 "b")) true
+    (ite (and (= x!0 1008) (= x!1 1003) (= x!2 "a")) true
+    (ite (and (= x!0 1007) (= x!1 1008) (= x!2 "b")) true
+    (ite (and (= x!0 1008) (= x!1 1001) (= x!2 "a")) true
+    (ite (and (= x!0 1000) (= x!1 1007) (= x!2 "a")) true
+      false)))))))))))))
+  (define-fun BRecursive ((x!0 Int) (x!1 Int) (x!2 String)) Bool
+    (let ((a!1 (not (or (BViaState x!0 x!1 x!2)
+                        (BRecursive (+ (- 1) x!0) x!1 x!2)))))
+      (not (or (not (>= x!0 1000)) a!1))))
+  (define-fun B ((x!0 Int) (x!1 String)) Bool
+    (ite (= (str.len x!1) 0) (= x!0 1000) (BRecursive 1009 x!0 x!1)))
+  (define-fun BViaState ((x!0 Int) (x!1 Int) (x!2 String)) Bool
+    (let ((a!1 (B x!0 (str.substr x!2 0 (+ (- 1) (str.len x!2)))))
+          (a!2 (A x!0 x!1 (str.at x!2 (+ (- 1) (str.len x!2))))))
+      (not (or (not a!1) (not a!2)))))
+  (define-fun F!8 ((x!0 Int)) Bool
+    (ite (= x!0 1009) true
+    (ite (= x!0 1001) true
+      false)))
+  (define-fun k!4 ((x!0 Int)) Int
+    (let ((a!1 (ite (<= 1008 x!0)
+                    (ite (<= 1009 x!0) (ite (<= 1010 x!0) 1010 1009) 1008)
+                    1007)))
+    (let ((a!2 (ite (<= 1005 x!0)
+                    (ite (<= 1006 x!0) (ite (<= 1007 x!0) a!1 1006) 1005)
+                    1004)))
+    (let ((a!3 (ite (<= 1002 x!0)
+                    (ite (<= 1003 x!0) (ite (<= 1004 x!0) a!2 1003) 1002)
+                    1001)))
+      (ite (<= 1000 x!0) (ite (<= 1001 x!0) a!3 1000) 999)))))
+  (define-fun F ((x!0 Int)) Bool
+    (F!8 (k!4 x!0)))
+  (define-fun k!0 ((x!0 String)) String
+    (ite (= x!0 "aa") "aa"
+    (ite (= x!0 "aab") "aab"
+    (ite (= x!0 "aba") "aba"
+    (ite (= x!0 "bba") "bba"
+    (ite (= x!0 "a") "a"
+    (ite (= x!0 "ab") "ab"
+    (ite (= x!0 "abab") "abab"
+    (ite (= x!0 "baa") "baa"
+    (ite (= x!0 "aaa") "aaa"
+    (ite (= x!0 "bab") "bab"
+    (ite (= x!0 "bbb") "bbb"
+    (ite (= x!0 "b") "b"
+    (ite (= x!0 "ba") "ba"
+    (ite (= x!0 "bb") "bb"
+    (ite (= x!0 "babb") "babb"
+      "abb"))))))))))))))))
+  (define-fun k!1 ((x!0 Int)) Int
+    (ite (= x!0 1006) 1006
+    (ite (= x!0 1000) 1000
+    (ite (= x!0 1005) 1005
+    (ite (= x!0 1007) 1007
+    (ite (= x!0 1009) 1009
+    (ite (= x!0 1004) 1004
+    (ite (= x!0 1001) 1001
+    (ite (= x!0 1002) 1002
+    (ite (= x!0 1003) 1003
+      1008))))))))))
+  (define-fun FinalRecursive ((x!0 Int)) String
+    (let ((a!1 (str.++ (int.to.str x!0) (str.++ ":" (FinalRecursive (+ 1 x!0))))))
+      (ite (<= x!0 1009) (ite (F x!0) a!1 (FinalRecursive (+ 1 x!0))) "end")))
+  (define-fun BRecursive!5 ((x!0 Int) (x!1 Int) (x!2 String)) Bool
+    (ite (and (= x!0 1000) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1001) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1009) (= x!1 1009) (= x!2 "babb")) true
+    (ite (and (= x!0 1008) (= x!1 1009) (= x!2 "babb")) true
+    (ite (and (= x!0 1007) (= x!1 1009) (= x!2 "babb")) true
+    (ite (and (= x!0 1006) (= x!1 1009) (= x!2 "babb")) true
+    (ite (and (= x!0 1005) (= x!1 1009) (= x!2 "babb")) true
+    (ite (and (= x!0 1004) (= x!1 1009) (= x!2 "babb")) true
+    (ite (and (= x!0 1003) (= x!1 1009) (= x!2 "babb")) true
+    (ite (and (= x!0 1009) (= x!1 1003) (= x!2 "bab")) true
+    (ite (and (= x!0 1008) (= x!1 1003) (= x!2 "bab")) true
+    (ite (and (= x!0 1009) (= x!1 1001) (= x!2 "aba")) true
+    (ite (and (= x!0 1008) (= x!1 1001) (= x!2 "aba")) true
+    (ite (and (= x!0 1009) (= x!1 1008) (= x!2 "ba")) true
+    (ite (and (= x!0 1009) (= x!1 1008) (= x!2 "ab")) true
+    (ite (and (= x!0 1008) (= x!1 1008) (= x!2 "ba")) true
+    (ite (and (= x!0 1008) (= x!1 1008) (= x!2 "ab")) true
+    (ite (and (= x!0 1007) (= x!1 1008) (= x!2 "ba")) true
+    (ite (and (= x!0 1007) (= x!1 1008) (= x!2 "ab")) true
+    (ite (and (= x!0 1006) (= x!1 1008) (= x!2 "ba")) true
+    (ite (and (= x!0 1005) (= x!1 1008) (= x!2 "ba")) true
+    (ite (and (= x!0 1009) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1008) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1009) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1008) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1007) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1007) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1006) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1006) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1005) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1005) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1004) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1004) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1003) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1003) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1002) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1002) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1001) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1001) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1000) (= x!1 1007) (= x!2 "a")) true
+    (ite (and (= x!0 1000) (= x!1 1005) (= x!2 "b")) true
+    (ite (and (= x!0 1009) (= x!1 1009) (= x!2 "abab")) true
+    (ite (and (= x!0 1008) (= x!1 1009) (= x!2 "abab")) true
+    (ite (and (= x!0 1007) (= x!1 1009) (= x!2 "abab")) true
+    (ite (and (= x!0 1006) (= x!1 1009) (= x!2 "abab")) true
+    (ite (and (= x!0 1005) (= x!1 1009) (= x!2 "abab")) true
+    (ite (and (= x!0 1004) (= x!1 1009) (= x!2 "abab")) true
+    (ite (and (= x!0 1003) (= x!1 1009) (= x!2 "abab")) true
+    (ite (and (= x!0 1009) (= x!1 1003) (= x!2 "aba")) true
+    (ite (and (= x!0 1008) (= x!1 1003) (= x!2 "aba")) true
+    (ite (and (= x!0 1009) (= x!1 1009) (= x!2 "baa")) true
+    (ite (and (= x!0 1008) (= x!1 1009) (= x!2 "baa")) true
+    (ite (and (= x!0 1007) (= x!1 1009) (= x!2 "baa")) true
+    (ite (and (= x!0 1006) (= x!1 1009) (= x!2 "baa")) true
+    (ite (and (= x!0 1005) (= x!1 1009) (= x!2 "baa")) true
+    (ite (and (= x!0 1004) (= x!1 1009) (= x!2 "baa")) true
+    (ite (and (= x!0 1009) (= x!1 1004) (= x!2 "ba")) true
+    (ite (and (= x!0 1008) (= x!1 1004) (= x!2 "ba")) true
+    (ite (and (= x!0 1007) (= x!1 1004) (= x!2 "ba")) true
+    (ite (and (= x!0 1006) (= x!1 1004) (= x!2 "ba")) true
+    (ite (and (= x!0 1005) (= x!1 1004) (= x!2 "ba")) true
+    (ite (and (= x!0 1009) (= x!1 1009) (= x!2 "aa")) true
+    (ite (and (= x!0 1008) (= x!1 1009) (= x!2 "aa")) true
+    (ite (and (= x!0 1007) (= x!1 1009) (= x!2 "aa")) true
+    (ite (and (= x!0 1006) (= x!1 1009) (= x!2 "aa")) true
+    (ite (and (= x!0 1009) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1008) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1007) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1006) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1005) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1004) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1003) (= x!1 1006) (= x!2 "a")) true
+    (ite (and (= x!0 1002) (= x!1 1006) (= x!2 "a")) true
+      false))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+  (define-fun AcceptRecursive ((x!0 Int) (x!1 String)) Bool
+    (let ((a!1 (not (or (not (B x!0 x!1)) (not (F x!0))))))
+    (let ((a!2 (not (or a!1 (AcceptRecursive (+ (- 1) x!0) x!1)))))
+      (not (or (not (>= x!0 1000)) a!2)))))
+  (define-fun k!3 ((x!0 String)) String
+    (ite (= x!0 "aa") "aa"
+    (ite (= x!0 "") ""
+    (ite (= x!0 "aab") "aab"
+    (ite (= x!0 "aba") "aba"
+    (ite (= x!0 "bba") "bba"
+    (ite (= x!0 "a") "a"
+    (ite (= x!0 "ab") "ab"
+    (ite (= x!0 "baa") "baa"
+    (ite (= x!0 "abab") "abab"
+    (ite (= x!0 "aaa") "aaa"
+    (ite (= x!0 "bab") "bab"
+    (ite (= x!0 "b") "b"
+    (ite (= x!0 "bbb") "bbb"
+    (ite (= x!0 "ba") "ba"
+    (ite (= x!0 "bb") "bb"
+    (ite (= x!0 "babb") "babb"
+      "abb")))))))))))))))))
+  (define-fun AcceptRecursive!6 ((x!0 Int) (x!1 String)) Bool
+    (ite (and (= x!0 1009) (= x!1 "aa")) true
+    (ite (and (= x!0 1009) (= x!1 "aba")) true
+    (ite (and (= x!0 1009) (= x!1 "baa")) true
+    (ite (and (= x!0 1009) (= x!1 "abab")) true
+    (ite (and (= x!0 1009) (= x!1 "babb")) true
+    (ite (and (= x!0 1008) (= x!1 "aba")) true
+    (ite (and (= x!0 1007) (= x!1 "aba")) true
+    (ite (and (= x!0 1006) (= x!1 "aba")) true
+    (ite (and (= x!0 1005) (= x!1 "aba")) true
+    (ite (and (= x!0 1004) (= x!1 "aba")) true
+    (ite (and (= x!0 1003) (= x!1 "aba")) true
+    (ite (and (= x!0 1002) (= x!1 "aba")) true
+    (ite (and (= x!0 1001) (= x!1 "aba")) true
+      false))))))))))))))
+  (define-fun FinalRecursive!7 ((x!0 Int)) String
+    (ite (= x!0 1000) "1001:1009:end"
+    (ite (= x!0 1001) "1001:1009:end"
+    (ite (= x!0 1010) "end"
+      "1009:end"))))
+  (define-fun k!2 ((x!0 Int)) Int
+    (let ((a!1 (ite (<= 1008 x!0)
+                    (ite (<= 1009 x!0) (ite (<= 1010 x!0) 1010 1009) 1008)
+                    1007)))
+    (let ((a!2 (ite (<= 1005 x!0)
+                    (ite (<= 1006 x!0) (ite (<= 1007 x!0) a!1 1006) 1005)
+                    1004)))
+    (let ((a!3 (ite (<= 1002 x!0)
+                    (ite (<= 1003 x!0) (ite (<= 1004 x!0) a!2 1003) 1002)
+                    1001)))
+      (ite (<= 1000 x!0) (ite (<= 1001 x!0) a!3 1000) 999)))))
+)

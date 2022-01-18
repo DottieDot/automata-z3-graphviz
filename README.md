@@ -6,5 +6,9 @@
 
 ## Usage
 ```sh
-cargo run -- --z3 nfa.txt -o graph.png
+cargo run -- --smt nfa.txt -o graph.png
+```
+or
+```sh
+cargo run -- --z3 input.txt -o graph.png
 ```

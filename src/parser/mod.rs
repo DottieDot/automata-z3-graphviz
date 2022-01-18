@@ -20,7 +20,7 @@ pub type Model = Vec<Function>;
 peg::parser! {
   pub grammar smt_parser() for str {
     pub rule model() -> Model
-      = "sat" _ "(" _ functions:((i:function() _ {i})*) _ ")" _ {
+      = "sat" _ "(" _ ("model")? _ functions:((i:function() _ {i})*) _ ")" _ {
         functions
       }
 
@@ -31,6 +31,12 @@ peg::parser! {
       / eq()
       / and()
       / ite()
+      / not()
+      / or()
+      / add()
+      / subtract()
+      / greater_or_equal()
+      / lower_or_equal()
       / cast()
       / parentheses()
       / identifier_expression()
@@ -61,6 +67,36 @@ peg::parser! {
         Expression::And(expressions)
       }
 
+    rule or() -> Expression
+      = "(" _ "or" _ expressions:((i:expression() _ {i})+) _ ")" {
+        Expression::Or(expressions)
+      }
+
+    rule not() -> Expression
+      = "(" _ "not" _ expression:expression() _ ")" {
+        Expression::Not(Box::new(expression))
+      }
+
+    rule add() -> Expression
+      = "(" _ "+" _ expressions:((i:expression() _ {i})+) _ ")" {
+        Expression::Add(expressions)
+      }
+    
+    rule subtract() -> Expression
+      = "(" _ "-" _ expressions:((i:expression() _ {i})+) _ ")" {
+        Expression::Subtract(expressions)
+      }
+    
+    rule greater_or_equal() -> Expression
+      = "(" _ ">=" _ expressions:((i:expression() _ {i})+) _ ")" {
+        Expression::GreaterOrEqual(expressions)
+      }
+    
+    rule lower_or_equal() -> Expression
+      = "(" _ "<=" _ expressions:((i:expression() _ {i})+) _ ")" {
+        Expression::LowerOrEqual(expressions)
+      }
+
     rule ite() -> Expression
       = "(" _ "ite" _ cond:expression() _ a:expression() _ b:expression() _ ")" {
         Expression::Ite(Box::new(cond), Box::new(a), Box::new(b))
@@ -72,8 +108,8 @@ peg::parser! {
       }
 
     rule parentheses() -> Expression
-      = "(" _ e:expression() _ ")" {
-        Expression::Parentheses(Box::new(e))
+      = "(" _ expressions:((i:expression() _ {i})+) _ ")" {
+        Expression::Parentheses(expressions)
       }
 
     rule integer() -> Expression
@@ -110,7 +146,7 @@ peg::parser! {
       / expected!("string literal")
 
     rule identifier() -> String
-      = quiet!{ n:$(['a'..='z' | 'A'..='Z']['a'..='z' | 'A'..='Z' | '0'..='9' | '_' | '!' | '.']*) {
+      = quiet!{ n:$(['a'..='z' | 'A'..='Z']['a'..='z' | 'A'..='Z' | '0'..='9' | '_' | '!' | '.' | '+']*) {
         n.to_owned()
       }}
       / expected!("identifier")
